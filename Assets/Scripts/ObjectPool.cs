@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] private GameObject objectPrefab;
+    [SerializeField] private GameObject[] objectPrefabs;
     [SerializeField] private List<GameObject> objectList;
-
     [SerializeField] private int poolSize;
 
     public static ObjectPool Instance { get; private set; }
-
 
     private void Awake()
     {
@@ -22,7 +20,6 @@ public class ObjectPool : MonoBehaviour
         {
             Instance = this;
         }
-
     }
 
     void Start()
@@ -34,7 +31,9 @@ public class ObjectPool : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
-            GameObject obj = Instantiate(objectPrefab);
+            GameObject objPrefab = objectPrefabs[Random.Range(0, objectPrefabs.Length)];
+
+            GameObject obj = Instantiate(objPrefab);
             obj.SetActive(false);
             objectList.Add(obj);
             obj.transform.parent = transform;
@@ -54,12 +53,5 @@ public class ObjectPool : MonoBehaviour
         AddObjectsToPool(1);
         objectList[objectList.Count - 1].SetActive(true);
         return objectList[objectList.Count - 1];
-
-
-    }
-
-    void Update()
-    {
-        
     }
 }
